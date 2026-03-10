@@ -7,7 +7,7 @@
 
 # print(hap, count)
 # print(hap/count)
-
+data = 0
 data = [10,20,30,40]
 # hap, count = 0, 0
 
