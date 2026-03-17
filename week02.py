@@ -16,3 +16,8 @@ data = [10,20,30,40]
 
 import statistics
 print(statistics.mean(data)) #가독성 좋음
+
+# 집가고 싶은 마음
+aura = 0
+aura += 999999999
+print(aura)
