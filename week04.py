@@ -1,10 +1,13 @@
-import seaborn as sns
 import pandas as pd
-#cars that made in eu with mpg is higher than 30
-#but, only print name of the car, mpg, country,
-#And, update the downloaded-origin-data
-mpg = sns.load_dataset('mpg')
 
-group_mpg = pd.DataFrame(mpg.groupby(by='cylinders'))
-print(group_mpg)
-#print(mpg.groupby(by='origin'))
+def squares(n) :
+    return n * n
+items = {'a':[100, 90, 80],
+         'b':[70,85, 95],
+         'c':[60,95, 100]
+         }
+df_items = pd.DataFrame(items,index=[1,2,3])
+print(df_items)
+print(df_items.apply(squares))
+
+print(df_items.apply(lambda n : n * n))
