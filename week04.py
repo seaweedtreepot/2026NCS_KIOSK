@@ -1,5 +1,8 @@
 import seaborn as sns
-
+#cars that made in eu with mpg is higher than 30
+#but, only print name of the car, mpg, country,
 mpg = sns.load_dataset('mpg')
-print(mpg.head(3))
-print(mpg.iat[1, 8])
+
+ans = mpg[['mpg','origin','name']].query('origin == "europe" and mpg >= 30').sort_values('mpg',ascending=False)
+
+print(ans)
