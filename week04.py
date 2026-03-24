@@ -1,13 +1,18 @@
 import pandas as pd
+import seaborn as sns
 
-def squares(n) :
-    return n * n
-items = {'a':[100, 90, 80],
-         'b':[70,85, 95],
-         'c':[60,95, 100]
-         }
-df_items = pd.DataFrame(items,index=[1,2,3])
-print(df_items)
-print(df_items.apply(squares))
+mpg = sns.load_dataset('mpg')
+print(mpg.info())
 
-print(df_items.apply(lambda n : n * n))
+# mpg_fill = mpg.fillna(0)
+# print(mpg_fill.info())
+
+# mpg.dropna(subset=['horsepower'],inplace=True)
+# print(mpg.info())
+
+med = mpg['horsepower'].median()
+
+mpg_filled = mpg.copy()
+mpg_filled['horsepower'] = mpg_filled['horsepower'].fillna(med)
+
+print(mpg_filled.info())
