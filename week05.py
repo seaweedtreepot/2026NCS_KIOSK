@@ -1,31 +1,83 @@
-import pandas as pd
-import seaborn as sns
-import time
-#현재문제 : Single responsibility 위배 + Open closed prinsiple 위해
-# 해결 -> 시간 출력 빼기 + 새로운 함수 만들기
+class CafeOrder:
+    DISCOUNT_THRESHOLD = 10000
+    DISCOUNT_RATE = 0.1
 
-def time_measure_decorator(f): # 이런 함수형 코드를 데코레이터 패턴이라고 한다
-    def wrapper(*args):
-        s = time.time()
-        r = f(*args)
-        e = time.time()
-        print(e-s)
-        return r
-    return wrapper
-# time_measure_decorator(one_to_n_loop) 형식으로도 가능
+    def __init__(self, drinks, prices):
+        self.drinks = drinks
+        self.prices = prices
+        self.amounts = [0] * len(drinks)
+        self.total_price = 0
 
-@time_measure_decorator
-def one_to_n_loop(n):
-    result = 0
-    for i in range(1, n+1):
-        result = result + i
-    return result
+    def apply_discount(self, price: int) -> float:
+        """
+        Apply discount rate when the total amount exceeds a certain threshold
+        :param price: price before discount
+        :return: price after discount
+        """
+        if price >= self.DISCOUNT_THRESHOLD:
+            return price * (1 - self.DISCOUNT_RATE)
+        return price
 
-@time_measure_decorator
-def one_to_n_math(n):
-    r= n*(n+1)//2
-    return r
+    def process_order(self, idx: int):
+        """
+        Process the order and accumulate the total price
+        :param idx: index of the ordered drink
+        """
+        print(f"{self.drinks[idx]} ordered. Price: {self.prices[idx]} won")
+        self.total_price += self.prices[idx]
+        self.amounts[idx] += 1
 
-number = int(input("input number :"))
-print(one_to_n_loop(number))
-print(one_to_n_math(number))
+    def display_menu(self) -> str:
+        """
+        Generate a dynamic menu string
+        :return: formatted menu string
+        """
+        return "".join(
+            [f"{k + 1}) {self.drinks[k]} {self.prices[k]} won  "
+             for k in range(len(self.drinks))] # <- 헷갈리는 문법
+        ) + f"{len(self.drinks) + 1}) Exit : "
+
+    def print_summary(self):
+        """Print order summary and final price"""
+        print("\nProduct\tPrice\tAmount\tSubtotal")
+        for i in range(len(self.drinks)):
+            if self.amounts[i] > 0:
+                print(f"{self.drinks[i]}\t{self.prices[i]}\t{self.amounts[i]}\t"
+                      f"{self.prices[i] * self.amounts[i]}")
+
+        discounted_price = self.apply_discount(self.total_price)
+        discount = self.total_price - discounted_price
+
+        print(f"\nTotal price before discount: {self.total_price} won")
+        if discount > 0:
+            print(f"Discount amount: {discount:.0f} won")
+            print(f"Total price after discount: {discounted_price:.0f} won")
+        else:
+            print("No discount applied")
+            print(f"Total price: {self.total_price} won")
+
+    def run(self):
+        """Execute the order system"""
+        while True:
+            try:
+                menu = int(input(self.display_menu()))
+                if 1 <= menu <= len(self.drinks):
+                    self.process_order(menu - 1)
+                elif menu == len(self.drinks) + 1:
+                    print("Order finished~")
+                    break
+                else:
+                    print(f"Menu {menu} is invalid. Please choose from the above menu.")
+            except ValueError:
+                print("Please enter a valid number. Try again.")
+
+        self.print_summary()
+
+
+if __name__ == "__main__":
+    # menu_drinks = ["Ice Americano", "Cafe Latte", "Watermelon Juice"]
+    # menu_prices = [2000, 3000, 4900]
+    menu_drinks = ["Ice Americano", "Cafe Latte"]
+    menu_prices = [2000, 3000]
+    cafe = CafeOrder(menu_drinks, menu_prices)
+    cafe.run()
