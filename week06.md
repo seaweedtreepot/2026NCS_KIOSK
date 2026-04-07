@@ -1,4 +1,4 @@
-#asdasdsadsadsadsd
+'''
 classDiagram
     class Menu {
         +List~str~ drinks
@@ -24,3 +24,4 @@ classDiagram
     }
 
     OrderProcessor "1"o-- "1"Menu : 필드로 포함 (Aggregation)
+'''
