@@ -146,5 +146,6 @@ if __name__ == "__main__":
     menu_prices = [2000, 3000, 4900]
 
     # OrderProcessor 객체가 Menu 객체를 생성하고 관리함
+    #강한 연관관계 compisition
     order_processor = OrderProcessor(menu_drinks, menu_prices)
     order_processor.run()
